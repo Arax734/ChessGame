@@ -1,0 +1,16 @@
+public class pole {
+    String color; //kolor pola
+    int szerokosc; //cyfra odpowiadajaca poziomej pozycji
+    int wysokosc; //cyfra odpowiadajaca pionowej pozycji
+    figura figura; //ewentualna przypisana figura
+
+    public pole(int szerokosc, int wysokosc, String color){
+        this.szerokosc = szerokosc;
+        this.wysokosc = wysokosc;
+        this.color = color;
+    }
+
+    public String getColor(){
+        return color;
+    }
+}

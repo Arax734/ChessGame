@@ -13,4 +13,20 @@ public class pole {
     public String getColor(){
         return color;
     }
+
+    public int getWysokosc(){
+        return wysokosc;
+    }
+
+    public int getSzerokosc(){
+        return szerokosc;
+    }
+
+    public figura getFigure(){
+        return figura;
+    }
+
+    public void setFigure(figura figura){
+        this.figura = figura;
+    }
 }

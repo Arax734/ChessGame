@@ -6,16 +6,80 @@ public abstract class figura { //klasa abstrakcyjna reprezentujaca figure
     public figura(String color){
         this.color = color;
     }
-
-    public boolean symuluj_ruch(String destination){
-        //funkcja przyjmuje stringa zlozonego z litery oraz cyfry, wykorzystamy to potem do odszukania
-        //potrzebnego nam pola
+    public pole getPole(){
+        return pole;
+    }
+    public String getColor(){
+        return color;
+    }
+    public void setPole(pole destination){
+        this.pole = destination;
+    }
+    abstract boolean symuluj_ruch_dla_krola(pole destination, pole[][] szachownica);
+    public boolean czy_krol_jest_atakowany(pole[][] szachownica) {
+        // Get the position of the king
+        pole kingSquare = this.getKingSquare(szachownica);
+        figura king = kingSquare.getFigure();
+        kingSquare.setFigure(null); // temporarily remove the king from the square
+        // Check if any opponent piece can move to the king's square
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                pole currentSquare = szachownica[rank][file];
+                figura currentPiece = currentSquare.getFigure();
+                if (currentPiece != null && currentPiece.getColor() != this.getColor()) {
+                    // Simulate a move for the opponent piece to the king's square
+                    if(currentPiece instanceof pion){
+                        if (currentPiece.symuluj_ruch_dla_krola(kingSquare, szachownica)) {
+                            kingSquare.setFigure(king); // put the king back on the square
+                            return true;
+                        }
+                    }
+                    else if (currentPiece.symuluj_ruch(kingSquare, szachownica)) {
+                        kingSquare.setFigure(king); // put the king back on the square
+                        return true;
+                    }
+                }
+            }
+        }
+        // No opponent piece can attack the king's square
+        kingSquare.setFigure(king); // put the king back on the square
+        return false;
+    }    
+    
+    // Helper method to find the square on which the king is located
+    private pole getKingSquare(pole[][] szachownica) {
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                pole currentSquare = szachownica[rank][file];
+                figura currentPiece = currentSquare.getFigure();
+                if (currentPiece instanceof krol && currentPiece.getColor() == this.getColor()) {
+                    return currentSquare;
+                }
+            }
+        }
+        // The king was not found on the board (should never happen in a legal game)
+        return null;
+    }
+    abstract boolean symuluj_ruch(pole destination, pole[][] szachownica);
+    public boolean wykonaj_ruch(pole destination, pole[][] szachownica) {
+        // The move is valid, update the board
+        pole start = this.getPole(); // get the starting square of the piece
+        figura capturedPiece = destination.getFigure(); // store any captured piece
+        start.setFigure(null); // remove the piece from the starting square
+        destination.setFigure(this); // place the piece on the destination square
+        this.setPole(destination); // update the position of the piece
+        if(czy_krol_jest_atakowany(szachownica)){
+            // Revert changes if the king is under attack
+            destination.setFigure(capturedPiece); // restore any captured piece
+            start.setFigure(this); // move the piece back to its starting square
+            this.setPole(start); // update the position of the piece
+            System.out.println("Nie mozna wykonac ruchu, krol jest atakowany!");
+            return false;
+        }
+        if(this instanceof krol || this instanceof wieza || this instanceof pion){
+            this.setWykonalRuch();
+        }
         return true;
     }
-
-    public void wykonaj_ruch(String destination){
-        if(symuluj_ruch(destination)){ //sprawdzamy czy danych ruch jest mozliwy
-
-        }
-    }
+    public abstract void setWykonalRuch();
 }

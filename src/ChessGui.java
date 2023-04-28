@@ -61,6 +61,8 @@ public class ChessGui extends JFrame {
                     squares[row][col].setBackground(Color.DARK_GRAY);
                 }
 
+                originalColors[row][col] = squares[row][col].getBackground();
+
                 // Usuń obramowanie przycisku
                 squares[row][col].setFocusPainted(false);
                 squares[row][col].setBorder(BorderFactory.createEmptyBorder());
@@ -88,13 +90,39 @@ public class ChessGui extends JFrame {
                                 for (int col = 0; col < 8; col++) {
                                     // Simulate a move to the current square
                                     if (to_check.symuluj_ruch(sz.getPole(col, row), szachownica)) {
-                                        possibleMoves.add(sz.getPole(col, row));
+                                        pole aktualne = to_check.getPole();
+                                        pole docelowe = sz.getPole(col, row);
+                                        if (sz.getPole(col, row).getFigure() != null) {
+                                            figura tymczasowa = docelowe.getFigure();
+                                            aktualne.setFigure(null);
+                                            docelowe.setFigure(to_check);
+                                            to_check.setPole(docelowe);
+                                            if (to_check.czy_krol_jest_atakowany(szachownica)) {
+                                                aktualne.setFigure(to_check);
+                                                docelowe.setFigure(tymczasowa);
+                                                to_check.setPole(aktualne);
+                                            } else {
+                                                aktualne.setFigure(to_check);
+                                                docelowe.setFigure(tymczasowa);
+                                                to_check.setPole(aktualne);
+                                                possibleMoves.add(sz.getPole(col, row));
+                                            }
+                                        } else {
+                                            aktualne.setFigure(null);
+                                            docelowe.setFigure(to_check);
+                                            to_check.setPole(docelowe);
+                                            if (to_check.czy_krol_jest_atakowany(szachownica)) {
+                                                aktualne.setFigure(to_check);
+                                                docelowe.setFigure(null);
+                                                to_check.setPole(aktualne);
+                                            } else {
+                                                aktualne.setFigure(to_check);
+                                                docelowe.setFigure(null);
+                                                to_check.setPole(aktualne);
+                                                possibleMoves.add(sz.getPole(col, row));
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                            for (int i = 0; i < 8; i++) {
-                                for (int j = 0; j < 8; j++) {
-                                    originalColors[i][j] = squares[i][j].getBackground();
                                 }
                             }
                             // Loop through the possible moves and set the background color of the
@@ -102,16 +130,17 @@ public class ChessGui extends JFrame {
                             for (pole pole : possibleMoves) {
                                 int row = pole.getWysokosc();
                                 int col = pole.getSzerokosc();
-                                if (sz.getFigure(col, row) != null && sz.getFigure(col, row).getColor() != to_check.getColor()) {
+                                if (sz.getFigure(col, row) != null
+                                        && sz.getFigure(col, row).getColor() != to_check.getColor()) {
                                     // square is occupied by enemy, set background color to red
                                     squares[row][col].setBackground(Color.RED);
                                 } else {
                                     // square is empty or occupied by own piece, set background color to orange
-                                    if(szachownica[row][col].getColor() == "czarny"){
-                                        squares[row][col].setBackground(new Color(255,165,0));
-                                    }else{
+                                    if (szachownica[row][col].getColor() == "czarny") {
+                                        squares[row][col].setBackground(new Color(255, 165, 0));
+                                    } else {
                                         squares[row][col].setBackground(Color.ORANGE);
-                                    }          
+                                    }
                                 }
                             }
                         } else {
@@ -122,15 +151,28 @@ public class ChessGui extends JFrame {
                                     for (int j = 0; j < 8; j++) {
                                         squares[i][j].setBackground(originalColors[i][j]);
                                     }
-                                } 
+                                }
+                                figura to_check = sz.getFigure(clickedCol, clickedRow);
+                                pole opposite = to_check.getOppositeKingSquare(szachownica);
+                                if (opposite.getFigure().czy_krol_jest_atakowany(szachownica)) {
+                                    int kingrow = opposite.getWysokosc();
+                                    int kingcol = opposite.getSzerokosc();
+                                    squares[kingrow][kingcol].setBackground(Color.RED);
+                                }
                                 if (szachownica[clickedCol][clickedRow].getColor() == "czarny") {
                                     squares[clickedRow][clickedCol].setBackground(Color.DARK_GRAY);
                                 } else {
                                     squares[clickedRow][clickedCol].setBackground(Color.LIGHT_GRAY);
                                 }
-                                
+                                pole ourking = to_check.getKingSquare(szachownica);
+                                if (ourking.getFigure().czy_krol_jest_atakowany(szachownica)) {
+                                    int kingrow = ourking.getWysokosc();
+                                    int kingcol = ourking.getSzerokosc();
+                                    squares[kingrow][kingcol].setBackground(Color.RED);
+                                }
+
                                 clickedRow = -1;
-                                clickedCol = -1;                                   
+                                clickedCol = -1;
                                 return;
                             }
                             // Poniżej warunek ruchu do zrobienia
@@ -142,7 +184,19 @@ public class ChessGui extends JFrame {
                                         for (int j = 0; j < 8; j++) {
                                             squares[i][j].setBackground(originalColors[i][j]);
                                         }
-                                    } 
+                                    }
+                                    pole ourking = to_check.getKingSquare(szachownica);
+                                    if (ourking.getFigure().czy_krol_jest_atakowany(szachownica) == false) {
+                                        int kingrow = ourking.getWysokosc();
+                                        int kingcol = ourking.getSzerokosc();
+                                        squares[kingrow][kingcol].setBackground(originalColors[kingrow][kingcol]);
+                                    }
+                                    pole opposite = to_check.getOppositeKingSquare(szachownica);
+                                    if (opposite.getFigure().czy_krol_jest_atakowany(szachownica)) {
+                                        int kingrow = opposite.getWysokosc();
+                                        int kingcol = opposite.getSzerokosc();
+                                        squares[kingrow][kingcol].setBackground(Color.RED);
+                                    }
                                     squares[finalRow][finalCol].setIcon(squares[clickedRow][clickedCol].getIcon());
                                     squares[clickedRow][clickedCol].setIcon(null);
                                     if (szachownica[clickedCol][clickedRow].getColor() == "czarny") {
@@ -150,16 +204,50 @@ public class ChessGui extends JFrame {
                                     } else {
                                         squares[clickedRow][clickedCol].setBackground(Color.LIGHT_GRAY);
                                     }
+                                    if (to_check.szach_mat(szachownica)) {
+                                        Icon icon = new ImageIcon("images/winner.png"); // Replace with the path to your
+                                        Image scaledImage = ((ImageIcon) icon).getImage().getScaledInstance(45, 45,
+                                                Image.SCALE_DEFAULT);
+                                        Icon scaledIcon = new ImageIcon(scaledImage);
+
+                                        String title = "Szach-mat";
+                                        String message = "Gratulacje, gracz " + to_check.getColor() + " wygrał grę!";
+                                        Object[] options = { "OK" };
+                                        int defaultOption = 0;
+
+                                        JOptionPane.showOptionDialog(null, message, title, JOptionPane.DEFAULT_OPTION,
+                                                JOptionPane.INFORMATION_MESSAGE, scaledIcon, options,
+                                                options[defaultOption]);
+                                    }
                                 } else {
                                     for (int i = 0; i < 8; i++) {
                                         for (int j = 0; j < 8; j++) {
                                             squares[i][j].setBackground(originalColors[i][j]);
                                         }
-                                    } 
+                                    }
+                                    Icon icon = new ImageIcon("images/battle.png"); // Replace with the path to your
+                                    Image scaledImage = ((ImageIcon) icon).getImage().getScaledInstance(40, 40,
+                                    Image.SCALE_DEFAULT);
+                                    Icon scaledIcon = new ImageIcon(scaledImage);
+
+                                    String title = "Ruch niemożliwy";
+                                    String message = "Król jest atakowany!";
+                                    Object[] options = { "OK" };
+                                    int defaultOption = 0;
+
+                                    JOptionPane.showOptionDialog(null, message, title, JOptionPane.DEFAULT_OPTION,
+                                            JOptionPane.INFORMATION_MESSAGE, scaledIcon, options,
+                                            options[defaultOption]);
                                     if (szachownica[clickedCol][clickedRow].getColor() == "czarny") {
                                         squares[clickedRow][clickedCol].setBackground(Color.DARK_GRAY);
                                     } else {
                                         squares[clickedRow][clickedCol].setBackground(Color.LIGHT_GRAY);
+                                    }
+                                    pole ourking = to_check.getKingSquare(szachownica);
+                                    if (ourking.getFigure().czy_krol_jest_atakowany(szachownica)) {
+                                        int kingrow = ourking.getWysokosc();
+                                        int kingcol = ourking.getSzerokosc();
+                                        squares[kingrow][kingcol].setBackground(Color.RED);
                                     }
                                     clickedRow = -1;
                                     clickedCol = -1;
@@ -171,20 +259,32 @@ public class ChessGui extends JFrame {
                                     for (int j = 0; j < 8; j++) {
                                         squares[i][j].setBackground(originalColors[i][j]);
                                     }
-                                } 
+                                }
+                                pole opposite = to_check.getOppositeKingSquare(szachownica);
+                                if (opposite.getFigure().czy_krol_jest_atakowany(szachownica)) {
+                                    int kingrow = opposite.getWysokosc();
+                                    int kingcol = opposite.getSzerokosc();
+                                    squares[kingrow][kingcol].setBackground(Color.RED);
+                                }
                                 if (szachownica[clickedCol][clickedRow].getColor() == "czarny") {
                                     squares[clickedRow][clickedCol].setBackground(Color.DARK_GRAY);
                                 } else {
                                     squares[clickedRow][clickedCol].setBackground(Color.LIGHT_GRAY);
                                 }
+                                pole ourking = to_check.getKingSquare(szachownica);
+                                if (ourking.getFigure().czy_krol_jest_atakowany(szachownica)) {
+                                    int kingrow = ourking.getWysokosc();
+                                    int kingcol = ourking.getSzerokosc();
+                                    squares[kingrow][kingcol].setBackground(Color.RED);
+                                }
                                 clickedRow = -1;
                                 clickedCol = -1;
-                                
+
                                 return;
                             }
                             // Czyścimy pozycję naciśniętego pionka
                             clickedRow = -1;
-                            clickedCol = -1; 
+                            clickedCol = -1;
                         }
                     }
                 });

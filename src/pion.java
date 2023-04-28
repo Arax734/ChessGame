@@ -85,10 +85,12 @@ public class pion extends figura {
             if (this.wykonal_ruch == false) {
                 if (destination.getWysokosc() == this.getPole().getWysokosc() + 2
                         && destination.getSzerokosc() == this.getPole().getSzerokosc()) {
-                    if (szachownica[destination.getWysokosc()-1][destination.getSzerokosc()].getFigure() != null){
-                        return false;
-                    }       
-                    return true;
+                    if (destination.getFigure() == null) {
+                        if (szachownica[destination.getWysokosc()-1][destination.getSzerokosc()].getFigure() != null){
+                            return false;
+                        }
+                        return true;
+                    }
                 }
             }
             if (destination.getWysokosc() == this.getPole().getWysokosc() + 1

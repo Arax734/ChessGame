@@ -11,6 +11,7 @@ public class skoczek extends figura {
         }
         if(destination.getFigure() != null){
             if(destination.getFigure().getColor() == this.getColor()){
+                
                 return false;
             }
         }

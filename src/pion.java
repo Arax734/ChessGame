@@ -6,15 +6,15 @@ public class pion extends figura {
         this.wykonal_ruch = wykonal_ruch;
     }
 
+    // Pomocnicza metoda, którą wykorzystujemy przy sprawdzaniu czy król może ruszyć się na odpowiednie pole
     @Override
-    public boolean symuluj_ruch_dla_krola(pole destination, pole[][] szachownica){
-        // funkcja przyjmuje pole, na ktorym sprawdzimy czy mozemy wykonac ruch
-        // sytuacja dla bialych
-        if (destination.getFigure() instanceof krol){
+    public boolean symuluj_ruch_dla_krola(pole destination, pole[][] szachownica) {
+        // sytuacja dla białych
+        if (destination.getFigure() instanceof krol) {
             return false;
         }
-        if(destination.getFigure() != null){
-            if(destination.getFigure().getColor() == this.getColor()){
+        if (destination.getFigure() != null) {
+            if (destination.getFigure().getColor() == this.getColor()) {
                 return false;
             }
         }
@@ -22,9 +22,9 @@ public class pion extends figura {
             if (destination.getWysokosc() == this.getPole().getWysokosc() - 1
                     && (destination.getSzerokosc() == this.getPole().getSzerokosc() - 1
                             || destination.getSzerokosc() == this.getPole().getSzerokosc() + 1)) {
-                
-                    return true;
-                
+
+                return true;
+
             }
 
         }
@@ -33,9 +33,9 @@ public class pion extends figura {
             if (destination.getWysokosc() == this.getPole().getWysokosc() + 1
                     && (destination.getSzerokosc() == this.getPole().getSzerokosc() - 1
                             || destination.getSzerokosc() == this.getPole().getSzerokosc() + 1)) {
-                
-                    return true;
-                
+
+                return true;
+
             }
         }
         return false;
@@ -43,13 +43,12 @@ public class pion extends figura {
 
     @Override
     public boolean symuluj_ruch(pole destination, pole[][] szachownica) {
-        // funkcja przyjmuje pole, na ktorym sprawdzimy czy mozemy wykonac ruch
-        // sytuacja dla bialych
-        if (destination.getFigure() instanceof krol){
+        // sytuacja dla białych
+        if (destination.getFigure() instanceof krol) {
             return false;
         }
-        if(destination.getFigure() != null){
-            if(destination.getFigure().getColor() == this.getColor()){
+        if (destination.getFigure() != null) {
+            if (destination.getFigure().getColor() == this.getColor()) {
                 return false;
             }
         }
@@ -58,7 +57,8 @@ public class pion extends figura {
                 if (destination.getWysokosc() == this.getPole().getWysokosc() - 2
                         && destination.getSzerokosc() == this.getPole().getSzerokosc()) {
                     if (destination.getFigure() == null) {
-                        if (szachownica[destination.getWysokosc()+1][destination.getSzerokosc()].getFigure() != null){
+                        if (szachownica[destination.getWysokosc() + 1][destination.getSzerokosc()]
+                                .getFigure() != null) {
                             return false;
                         }
                         return true;
@@ -78,7 +78,23 @@ public class pion extends figura {
                     return true;
                 }
             }
-
+            if(destination.getWysokosc() == this.getPole().getWysokosc() - 1
+            && (destination.getSzerokosc() == this.getPole().getSzerokosc() - 1
+                    || destination.getSzerokosc() == this.getPole().getSzerokosc() + 1)){
+                        if(destination.getFigure() == null){
+                            if(szachownica[destination.getWysokosc()+1][destination.getSzerokosc()].getFigure() != null){
+                                figura passant = szachownica[destination.getWysokosc()+1][destination.getSzerokosc()].getFigure();
+                                if(passant.getColor() != this.getColor()){
+                                    if(passant instanceof pion){
+                                        int roznica = Math.abs(passant.getPole().getWysokosc()-passant.getPoprzedniePole().getWysokosc());
+                                        if(roznica == 2 && passant.getPassant() == true){
+                                            return true;
+                                        }
+                                    }     
+                                }
+                            }
+                        }
+                    } 
         }
         // sytuacja dla czarnych
         if (this.getColor() == "czarny") {
@@ -86,7 +102,8 @@ public class pion extends figura {
                 if (destination.getWysokosc() == this.getPole().getWysokosc() + 2
                         && destination.getSzerokosc() == this.getPole().getSzerokosc()) {
                     if (destination.getFigure() == null) {
-                        if (szachownica[destination.getWysokosc()-1][destination.getSzerokosc()].getFigure() != null){
+                        if (szachownica[destination.getWysokosc() - 1][destination.getSzerokosc()]
+                                .getFigure() != null) {
                             return false;
                         }
                         return true;
@@ -106,11 +123,29 @@ public class pion extends figura {
                     return true;
                 }
             }
+            if(destination.getWysokosc() == this.getPole().getWysokosc() + 1
+            && (destination.getSzerokosc() == this.getPole().getSzerokosc() - 1
+                    || destination.getSzerokosc() == this.getPole().getSzerokosc() + 1)){
+                        if(destination.getFigure() == null){
+                            if(szachownica[destination.getWysokosc()-1][destination.getSzerokosc()].getFigure() != null){
+                                figura passant = szachownica[destination.getWysokosc()-1][destination.getSzerokosc()].getFigure();
+                                if(passant.getColor() != this.getColor()){
+                                    if(passant instanceof pion){
+                                        int roznica = Math.abs(passant.getPole().getWysokosc()-passant.getPoprzedniePole().getWysokosc());
+                                        if(roznica == 2 && passant.getPassant() == true){
+                                            return true;
+                                        }
+                                    }     
+                                }
+                            }
+                        }
+                    }
         }
         return false;
     }
+
     @Override
-    public void setWykonalRuch(){
+    public void setWykonalRuch() {
         this.wykonal_ruch = true;
     }
 }

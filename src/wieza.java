@@ -8,7 +8,6 @@ public class wieza extends figura {
 
     @Override
     public boolean symuluj_ruch(pole destination, pole[][] szachownica) {
-        // funkcja przyjmuje pole, na ktorym sprawdzimy czy mozemy wykonac ruch
         if (destination.getFigure() instanceof krol) {
             return false;
         }
@@ -18,7 +17,7 @@ public class wieza extends figura {
             }
         }
         if (destination.getSzerokosc() == this.getPole().getSzerokosc()) {
-            // Check for collisions along the file
+            // Sprawdzamy kolizje dla ruchu pionowego
             int startRank = Math.min(destination.getWysokosc(), this.getPole().getWysokosc()) + 1;
             int endRank = Math.max(destination.getWysokosc(), this.getPole().getWysokosc()) - 1;
             for (int rank = startRank; rank <= endRank; rank++) {
@@ -28,7 +27,7 @@ public class wieza extends figura {
             }
             return true;
         } else if (destination.getWysokosc() == this.getPole().getWysokosc()) {
-            // Check for collisions along the rank
+            // Sprawdzamy kolizje dla ruchu poziomego
             int startFile = Math.min(destination.getSzerokosc(), this.getPole().getSzerokosc()) + 1;
             int endFile = Math.max(destination.getSzerokosc(), this.getPole().getSzerokosc()) - 1;
             for (int file = startFile; file <= endFile; file++) {
@@ -40,11 +39,13 @@ public class wieza extends figura {
         }
         return false;
     }
-    public boolean symuluj_ruch_dla_krola(pole destination, pole[][] szachownica){
+
+    public boolean symuluj_ruch_dla_krola(pole destination, pole[][] szachownica) {
         return false;
     }
+
     @Override
-    public void setWykonalRuch(){
+    public void setWykonalRuch() {
         this.wykonal_ruch = true;
     }
 }

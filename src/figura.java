@@ -150,6 +150,9 @@ public abstract class figura { // klasa abstrakcyjna reprezentujaca figure
                                 figura passant = szachownica[destination.getWysokosc()+1][destination.getSzerokosc()].getFigure();
                                 if(passant.getColor() != this.getColor()){
                                     if(passant instanceof pion){
+                                        if(passant.getPoprzedniePole() == null){
+                                            passant.setPoprzedniePole(passant.getPole());
+                                        }
                                         int roznica = Math.abs(passant.getPole().getWysokosc()-passant.getPoprzedniePole().getWysokosc());
                                     if(roznica == 2 && passant.getPassant() == true){
                                         passant.getPole().setFigure(null);
@@ -170,6 +173,9 @@ public abstract class figura { // klasa abstrakcyjna reprezentujaca figure
                                 figura passant = szachownica[destination.getWysokosc()-1][destination.getSzerokosc()].getFigure();
                                 if(passant.getColor() != this.getColor()){
                                     if(passant instanceof pion){
+                                        if(passant.getPoprzedniePole() == null){
+                                            passant.setPoprzedniePole(passant.getPole());
+                                        }
                                         int roznica = Math.abs(passant.getPole().getWysokosc()-passant.getPoprzedniePole().getWysokosc());
                                         if(roznica == 2 && passant.getPassant() == true){
                                             passant.getPole().setFigure(null);

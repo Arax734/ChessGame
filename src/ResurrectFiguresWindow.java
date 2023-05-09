@@ -93,7 +93,7 @@ public class ResurrectFiguresWindow extends JFrame {
             }
             selectedFigureIndex = index;
             JButton selectedButton = (JButton) e.getSource();
-            selectedButton.setBackground(Color.GREEN); // set the color to green
+            selectedButton.setBackground(Color.GREEN);
         }
     }
 

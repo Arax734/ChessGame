@@ -28,19 +28,18 @@ public class ChessGui extends JFrame {
 
         // Stwórz etykiety pola na planszy
         chessBoard = new JPanel(new GridLayout(9, 9)) {
-            // Efekt gradientu
+            private Color currentColor = new Color(200, 200, 200);
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g.create();
                 GradientPaint gradientPaint = new GradientPaint(
-                        0, 0, new Color(200, 200, 200),
+                        0, 0, currentColor,
                         getWidth(), getHeight(), new Color(33, 33, 33));
                 g2d.setPaint(gradientPaint);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
                 g2d.dispose();
             }
         };
-
         squares = new JButton[8][8];
         for (int row = 0; row < 8; row++) {
             // Stwórz etykietę pionową
@@ -82,7 +81,7 @@ public class ChessGui extends JFrame {
                                 return;
                             }
                             // Jeśli nie jest nasza tura
-                            if(sz.getFigure(finalCol, finalRow).getColor() != recentPlayer){
+                            if (sz.getFigure(finalCol, finalRow).getColor() != recentPlayer) {
                                 System.out.println("Teraz jest ruch przeciwnika");
                                 return;
                             }
@@ -147,21 +146,23 @@ public class ChessGui extends JFrame {
                                         squares[row][col].setBackground(Color.ORANGE);
                                     }
                                 }
-                                if(sz.getFigure(col, row) == null){
-                                    if(to_check instanceof pion){
-                                        if(to_check.getColor() == "bialy"){
-                                            if(sz.getFigure(col, row+1) != null){
-                                                if(sz.getFigure(col, row+1) instanceof pion && sz.getFigure(col,row+1).getColor() != to_check.getColor()){
+                                if (sz.getFigure(col, row) == null) {
+                                    if (to_check instanceof pion) {
+                                        if (to_check.getColor() == "bialy") {
+                                            if (sz.getFigure(col, row + 1) != null) {
+                                                if (sz.getFigure(col, row + 1) instanceof pion && sz
+                                                        .getFigure(col, row + 1).getColor() != to_check.getColor()) {
                                                     squares[row][col].setBackground(Color.RED);
                                                 }
                                             }
-                                        }else{
-                                            if(sz.getFigure(col, row-1) != null){
-                                                if(sz.getFigure(col, row-1) instanceof pion && sz.getFigure(col,row-1).getColor() != to_check.getColor()){
+                                        } else {
+                                            if (sz.getFigure(col, row - 1) != null) {
+                                                if (sz.getFigure(col, row - 1) instanceof pion && sz
+                                                        .getFigure(col, row - 1).getColor() != to_check.getColor()) {
                                                     squares[row][col].setBackground(Color.RED);
                                                 }
                                             }
-                                        }                                     
+                                        }
                                     }
                                 }
                             }
@@ -180,11 +181,7 @@ public class ChessGui extends JFrame {
                                     int kingcol = opposite.getSzerokosc();
                                     squares[kingrow][kingcol].setBackground(Color.RED);
                                 }
-                                if (szachownica[clickedCol][clickedRow].getColor() == "czarny") {
-                                    squares[clickedRow][clickedCol].setBackground(Color.DARK_GRAY);
-                                } else {
-                                    squares[clickedRow][clickedCol].setBackground(Color.LIGHT_GRAY);
-                                }
+
                                 pole ourking = to_check.getKingSquare(szachownica);
                                 if (ourking.getFigure().czy_krol_jest_atakowany(szachownica)) {
                                     int kingrow = ourking.getWysokosc();
@@ -260,11 +257,7 @@ public class ChessGui extends JFrame {
                                     }
                                     squares[finalRow][finalCol].setIcon(squares[clickedRow][clickedCol].getIcon());
                                     squares[clickedRow][clickedCol].setIcon(null);
-                                    if (szachownica[clickedCol][clickedRow].getColor() == "czarny") {
-                                        squares[clickedRow][clickedCol].setBackground(Color.DARK_GRAY);
-                                    } else {
-                                        squares[clickedRow][clickedCol].setBackground(Color.LIGHT_GRAY);
-                                    }
+
                                     // Sprawdzamy czy pion doszedl do konca szachownicy
                                     if (to_check instanceof pion) {
                                         if (to_check.color == "bialy") {
@@ -645,10 +638,9 @@ public class ChessGui extends JFrame {
                                             newGUI.setVisible(true); // Wyświetlamy nowe GUI
                                         }
                                     }
-                                    if(recentPlayer == "bialy"){
+                                    if (recentPlayer == "bialy") {
                                         recentPlayer = "czarny";
-                                    }
-                                    else{
+                                    } else {
                                         recentPlayer = "bialy";
                                     }
                                     this.clearfield(szachownica);
@@ -676,11 +668,6 @@ public class ChessGui extends JFrame {
                                             JOptionPane.INFORMATION_MESSAGE, scaledIcon, options,
                                             options[defaultOption]);
 
-                                    if (szachownica[clickedCol][clickedRow].getColor() == "czarny") {
-                                        squares[clickedRow][clickedCol].setBackground(Color.DARK_GRAY);
-                                    } else {
-                                        squares[clickedRow][clickedCol].setBackground(Color.LIGHT_GRAY);
-                                    }
                                     pole ourking = to_check.getKingSquare(szachownica);
                                     if (ourking.getFigure().czy_krol_jest_atakowany(szachownica)) {
                                         int kingrow = ourking.getWysokosc();
@@ -704,11 +691,7 @@ public class ChessGui extends JFrame {
                                     int kingcol = opposite.getSzerokosc();
                                     squares[kingrow][kingcol].setBackground(Color.RED);
                                 }
-                                if (szachownica[clickedCol][clickedRow].getColor() == "czarny") {
-                                    squares[clickedRow][clickedCol].setBackground(Color.DARK_GRAY);
-                                } else {
-                                    squares[clickedRow][clickedCol].setBackground(Color.LIGHT_GRAY);
-                                }
+
                                 pole ourking = to_check.getKingSquare(szachownica);
                                 if (ourking.getFigure().czy_krol_jest_atakowany(szachownica)) {
                                     int kingrow = ourking.getWysokosc();
@@ -726,10 +709,10 @@ public class ChessGui extends JFrame {
                         }
                     }
 
-                    public void clearfield(pole[][] szachownica){
-                        for(int x=0; x<8; x++){
-                            for(int y=0; y<8; y++){
-                                if(szachownica[x][y].getFigure() == null){
+                    public void clearfield(pole[][] szachownica) {
+                        for (int x = 0; x < 8; x++) {
+                            for (int y = 0; y < 8; y++) {
+                                if (szachownica[x][y].getFigure() == null) {
                                     squares[x][y].setIcon(null);
                                 }
                             }
@@ -740,11 +723,133 @@ public class ChessGui extends JFrame {
         }
 
         // Dodaj etykiety poziome do planszy
-        chessBoard.add(new JLabel());
+        // Create the button
+        JButton settings = new JButton();
+        settings.setSize(70, 70);
+        settings.setOpaque(false);
+        settings.setContentAreaFilled(false);
+        settings.setBorderPainted(false);
+        ImageIcon original = new ImageIcon("images/settings.png");
+        Image scaled = original.getImage().getScaledInstance(WIDTH - 35, HEIGHT - 35, Image.SCALE_SMOOTH);
+        settings.setIcon(new ImageIcon(scaled));
+        settings.setFocusPainted(false);
+
+        settings.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFrame newWindow = new JFrame();
+                newWindow.setTitle("Ustawienia");
+                newWindow.setSize(280, 420);
+                newWindow.setVisible(true);
+                newWindow.setLocationRelativeTo(null);
+                newWindow.setResizable(false);
+
+                JLabel settingsLabel = new JLabel();
+                ImageIcon original2 = new ImageIcon("images/settings.png");
+                Image scaled2 = original2.getImage().getScaledInstance(WIDTH + 20, HEIGHT + 20, Image.SCALE_SMOOTH);
+                settingsLabel.setIcon(new ImageIcon(scaled2));
+
+                JPanel buttonPanel = new JPanel();
+                buttonPanel.setLayout(new GridLayout(0, 1, 80, 15));
+                JButton button1 = new JButton("Zmiana motywu");
+                JButton button2 = new JButton("Restart");
+                JButton button3 = new JButton("Zakończ grę");
+                button1.setFocusPainted(false);
+                button2.setFocusPainted(false);
+                button3.setFocusPainted(false);
+                button1.setBorderPainted(false);
+                button2.setBorderPainted(false);
+                button3.setBorderPainted(false);
+                button1.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        for (int row = 0; row < 8; row++) {
+                            for (int col = 0; col < 8; col++) {
+                                if ((row + col) % 2 == 0) {
+                                    if(squares[row][col].getBackground() == Color.LIGHT_GRAY){
+                                        squares[row][col].setBackground(new Color(250, 202, 138));
+                                        originalColors[row][col] = squares[row][col].getBackground();
+                                    }else{
+                                        squares[row][col].setBackground(Color.LIGHT_GRAY);
+                                        originalColors[row][col] = squares[row][col].getBackground();
+                                    }
+                                } else {
+                                    if(squares[row][col].getBackground() == Color.DARK_GRAY){
+                                        squares[row][col].setBackground(new Color(127, 75, 36));
+                                        originalColors[row][col] = squares[row][col].getBackground();
+                                    }else{
+                                        squares[row][col].setBackground(Color.DARK_GRAY);
+                                        originalColors[row][col] = squares[row][col].getBackground();
+                                    }
+                                }
+                            }
+                        }
+                        newWindow.dispose();
+                    }
+                });
+                button2.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        dispose();
+                        newWindow.dispose();
+                        dispose();
+                        ChessGui newGUI = new ChessGui();
+                        newGUI.setVisible(true);
+                    }
+                });
+                button3.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        dispose();
+                        newWindow.dispose();
+                        dispose();
+                    }
+                });
+                buttonPanel.add(button1);
+                buttonPanel.add(button2);
+                buttonPanel.add(button3);
+
+                // Create a new JLabel for the text
+                JLabel bottomLabel = new JLabel("Autor: Kacper Fryt");
+
+                // Create a new GridBagLayout and set it as the layout manager for the new
+                // window
+                GridBagLayout layout = new GridBagLayout();
+                newWindow.setLayout(layout);
+
+                int topMargin = 20;
+
+                GridBagConstraints gbcLabel = new GridBagConstraints();
+                gbcLabel.gridx = 0;
+                gbcLabel.gridy = 0;
+                gbcLabel.anchor = GridBagConstraints.CENTER;
+                gbcLabel.insets = new Insets(topMargin, 0, 0, 0);
+
+                newWindow.add(settingsLabel, gbcLabel);
+
+                GridBagConstraints gbcPanel = new GridBagConstraints();
+                gbcPanel.gridx = 0;
+                gbcPanel.gridy = 1;
+                gbcPanel.anchor = GridBagConstraints.CENTER;
+                gbcPanel.insets = new Insets(10, 0, 10, 0);
+
+                newWindow.add(buttonPanel, gbcPanel);
+
+                // Create a new GridBagConstraints object and set its properties for the bottom
+                // label
+                GridBagConstraints gbcBottom = new GridBagConstraints();
+                gbcBottom.gridx = 0;
+                gbcBottom.gridy = 2;
+                gbcBottom.anchor = GridBagConstraints.PAGE_END;
+                gbcBottom.insets = new Insets(10, 0, 20, 0);
+
+                // Add the bottom label to the new window with the specified constraints
+                newWindow.add(bottomLabel, gbcBottom);
+
+            }
+        });
+        chessBoard.add(settings);
+
         for (int i = 0; i < 8; i++) {
             JLabel label = new JLabel(String.valueOf((char) ('A' + i)), JLabel.CENTER);
             label.setFont(new Font("Century Gothic Bold", Font.PLAIN, 18));
-            label.setForeground(Color.LIGHT_GRAY); // set the text color to blue
+            label.setForeground(Color.LIGHT_GRAY);
             chessBoard.add(label);
         }
 

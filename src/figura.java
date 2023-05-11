@@ -1,9 +1,9 @@
 public abstract class figura { // klasa abstrakcyjna reprezentujaca figure
-    String color; // kolor figury
-    pole pole; // pole, na ktorym stoi figura
-    boolean zbita; // okresla czy figura jest zbita
-    pole poprzednie_pole;
-    boolean passant;
+    protected String color; // kolor figury
+    protected pole pole; // pole, na ktorym stoi figura
+    protected boolean zbita; // okresla czy figura jest zbita
+    private pole poprzednie_pole;
+    private boolean passant;
 
     public figura(String color) {
         this.color = color;

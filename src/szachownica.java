@@ -1,7 +1,7 @@
 public class szachownica {
-    pole[][] szachownica;
-    figura[] zbite_czarne;
-    figura[] zbite_biale;
+    private pole[][] szachownica;
+    protected figura[] zbite_czarne;
+    protected figura[] zbite_biale;
 
     public szachownica() {
         // tworzenie szachownicy

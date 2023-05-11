@@ -1,8 +1,8 @@
 public class pole {
-    String color; // kolor pola
-    int szerokosc; // cyfra odpowiadajaca poziomej pozycji
-    int wysokosc; // cyfra odpowiadajaca pionowej pozycji
-    figura figura; // ewentualna przypisana figura
+    private String color; // kolor pola
+    private int szerokosc; // cyfra odpowiadajaca poziomej pozycji
+    private int wysokosc; // cyfra odpowiadajaca pionowej pozycji
+    protected figura figura; // ewentualna przypisana figura
 
     public pole(int szerokosc, int wysokosc, String color) {
         this.szerokosc = szerokosc;

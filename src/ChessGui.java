@@ -11,7 +11,7 @@ public class ChessGui extends JFrame {
     private final int HEIGHT = 70; // wysokość pola
     private int clickedRow = -1;
     private int clickedCol = -1;
-    public String recentPlayer = "bialy";
+    private String recentPlayer = "bialy";
 
     public ChessGui() {
         setTitle("Szachy");
